@@ -74,7 +74,7 @@
 
     function editLabel(edge, deleteOnCancel) {
         dialogs.showEdgeLabelDialog(edge.data, (data) => {
-            toolkit.updateEdge(edge, { label:data.text || "" });
+            toolkit.updateEdge(edge, { label:data.label || "" });
         }, () => {
             if (deleteOnCancel) {
                 toolkit.removeEdge(edge);
