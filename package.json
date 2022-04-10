@@ -1,0 +1,30 @@
+{
+  "name": "svelte-flowchart-builder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "rollup": "npx rollup -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsplumb-toolkit-demonstrations/svelte-flowchart-builder.git"
+  },
+  "author": "jsPlumb <hello@jsplumbtoolkit.com> (https://jsplumbtoolkit.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jsplumb-toolkit-demonstrations/svelte-flowchart-builder/issues"
+  },
+  "homepage": "https://github.com/jsplumb-toolkit-demonstrations/svelte-flowchart-builder#readme",
+  "devDependencies": {
+    "svelte": "*",
+    "@jsplumbtoolkit/browser-ui-svelte": "^5.6.0",
+    "@jsplumbtoolkit/dialogs": "^5.6.0",
+    "@jsplumbtoolkit/connector-editors-orthogonal": "^5.6.0",
+    "@jsplumbtoolkit/browser-ui-plugin-drawing-tools": "^5.6.0",
+    "@jsplumbtoolkit/browser-ui-plugin-lasso": "^5.6.0",
+    "@rollup/plugin-node-resolve": "*",
+    "rollup-plugin-svelte": "^7.1.0",
+    "rollup": "^2.26.11"
+  }
+}
