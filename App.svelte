@@ -25,6 +25,8 @@
     import OutputComponent from './components/OutputComponent.svelte'
     import QuestionComponent from './components/QuestionComponent.svelte'
 
+    import Controls from './Controls.svelte'
+
     OrthogonalConnectorEditor.initialize()
 
     export let data;
@@ -183,6 +185,22 @@
         toolkit.load({data})
     }
 
+    function zoom() {
+        surfaceComponent.getSurface().zoomToFit()
+    }
+
+    function undo() { toolkit.undo() }
+    function redo() { toolkit.redo() }
+
+    function clear() {
+        if(confirm("Clear flowchart?")) {
+            toolkit.clear()
+        }
+    }
+
+    function setMode(evt) {
+        surfaceComponent.getSurface().setMode(evt.detail)
+    }
 
     onMount( async() => {
         pathEditor = ConnectorEditors.newInstance(surfaceComponent.getSurface())
@@ -203,7 +221,7 @@
                         injector={injectManager}
     />
     <!-- controls -->
-    <div class="controls"></div>
+    <Controls on:zoomToFit={zoom} on:undo={undo} on:redo={redo} on:clear={clear} on:mode={setMode}/>
     <!-- miniview -->
     <div class="miniview"></div>
 </div>
