@@ -5,7 +5,7 @@ import resolve from '@rollup/plugin-node-resolve';
 export default {
     input: './main.js',
     output: {
-        file: 'public/bundle.js',
+        file: 'dist/bundle.js',
         format: 'iife'
     },
     plugins: [
