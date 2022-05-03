@@ -1,7 +1,7 @@
 
 <script>
     import { onMount } from "svelte"
-    import { AbsoluteLayout } from "@jsplumbtoolkit/core"
+    import { AbsoluteLayout, uuid } from "@jsplumbtoolkit/core"
     import { newInstance,
         SurfaceComponent,
         render,
@@ -13,6 +13,8 @@
         ArrowOverlay, AnchorLocations, DEFAULT, LabelOverlay
     } from "@jsplumbtoolkit/browser-ui-svelte";
 
+    import { SurfaceDropManager } from "@jsplumbtoolkit/drop"
+
     import { initialiseDialogs } from './dialogs'
 
     import { OrthogonalConnector } from "@jsplumbtoolkit/connector-orthogonal"
@@ -20,12 +22,11 @@
     import * as OrthogonalConnectorEditor from "@jsplumbtoolkit/connector-editors-orthogonal"
     import { DrawingToolsPlugin } from "@jsplumbtoolkit/browser-ui-plugin-drawing-tools"
     import { LassoPlugin } from "@jsplumbtoolkit/browser-ui-plugin-lasso"
+    import { MiniviewPlugin } from "@jsplumbtoolkit/browser-ui-plugin-miniview"
 
     import ActionComponent from './components/ActionComponent.svelte'
     import OutputComponent from './components/OutputComponent.svelte'
     import QuestionComponent from './components/QuestionComponent.svelte'
-
-    import Controls from './Controls.svelte'
 
     OrthogonalConnectorEditor.initialize()
 
@@ -36,7 +37,35 @@
     let dialogs = initialiseDialogs()
 
     let pathEditor;
-    const toolkit = newInstance()
+    const toolkit = newInstance({
+        nodeFactory: (type, data, callback) => {
+            dialogs.editName(data, (d) => {
+                data.text = d.text;
+                // if the user entered a name...
+                if (data.text) {
+                    // and it was at least 2 chars
+                    if (data.text.length >= 2) {
+                        // set an id and continue.
+                        data.id = uuid();
+                        callback(data);
+                    }
+                    else
+                    // else advise the user.
+                        alert(type + " names must be at least 2 characters!");
+                }
+                // else...do not proceed.
+            });
+            return true
+        },
+        beforeStartConnect:(source, edgeType) => {
+            // limit edges from start node to 1. if any other type of node, return
+            return (source.data.type === START && source.getEdges().length > 0) ? false : { label:"..." }
+        },
+        edgeFactory: (type, data, continueCallback, abortCallback) => {
+            dialogs.showEdgeLabelDialog(data, continueCallback, abortCallback)
+            return true
+        }
+    })
 
     const START = "start"
     const OUTPUT = "output"
@@ -46,6 +75,12 @@
     const SOURCE = "source"
     const TARGET = "target"
     const RESPONSE = "response"
+
+    const nodeTypes = [
+        { label: 'Question', type: 'question', w: 240, h: 220 },
+        { label: 'Action', type: 'action', w: 240, h: 160 },
+        { label: 'Output', type: 'output', w: 240, h: 160 }
+    ]
 
     /**
      * Optional props injector for vertices. In this app we supply a manager to each vertex that offers remove and edit methods.
@@ -167,7 +202,16 @@
             filter: ".jtk-draw-handle, .node-action, .node-action i"
         },
         plugins:[
-            DrawingToolsPlugin.type, LassoPlugin.type
+            DrawingToolsPlugin.type,
+            LassoPlugin.type,
+            {
+                type: MiniviewPlugin.type,
+                options: {
+                    container: document.getElementById("miniview")
+                }
+            }
+
+
         ],
         defaults:{
             connector:OrthogonalConnector.type
@@ -205,6 +249,19 @@
     onMount( async() => {
         pathEditor = ConnectorEditors.newInstance(surfaceComponent.getSurface())
 
+        new SurfaceDropManager({
+            surface:surfaceComponent.getSurface(),
+            source:document.getElementById("node-palette"),
+            selector:"div",
+            dataGenerator:(el) => {
+                return {
+                    type:el.getAttribute("data-node-type"),
+                    w:el.getAttribute("data-width"),
+                    h:el.getAttribute("data-height")
+                }
+            }
+        })
+
         if (data) {
             load(data)
         }
@@ -218,10 +275,18 @@
                       renderParams={renderParams}
                       toolkit={toolkit}
                       bind:this={surfaceComponent}
-                        injector={injectManager}
+                      injector={injectManager}
     />
     <!-- controls -->
-    <Controls on:zoomToFit={zoom} on:undo={undo} on:redo={redo} on:clear={clear} on:mode={setMode}/>
+    <div class="controls">
+        <i class="fa fa-arrows selected-mode" data-mode="pan" title="Pan Mode" on:click={() => setMode('select')}></i>
+        <i class="fa fa-pencil" data-mode="select" title="Select Mode" on:click={() => setMode('select')}></i>
+        <i class="fa fa-home" data-reset title="Zoom To Fit" on:click={() => zoom()}></i>
+        <i class="fa fa-undo" data-undo="true" title="Undo last action" on:click={() => toolkit.undo()}></i>
+        <i class="fa fa-repeat" data-redo="true" title="Redo last action" on:click={() => toolkit.redo()}></i>
+        <i class="fa fa-times" title="Clear flowchart" on:click={() => clear()}></i>
+    </div>
+
     <!-- miniview -->
     <div class="miniview"></div>
 </div>
@@ -229,7 +294,12 @@
 <div class="jtk-demo-rhs">
 
     <!-- the node palette -->
-    <div class="node-palette sidebar" id="node-palette"></div>
+    <div class="node-palette sidebar" id="node-palette">
+        {#each nodeTypes as sidebarItem}
+        <div class="sidebar-item" data-node-type={sidebarItem.type} title="Drag to add new" data-width={sidebarItem.w}
+             data-height={sidebarItem.h}>{sidebarItem.label}</div>
+        {/each}
+    </div>
     <div class="description">
         <p>
             This sample application is a builder for flowcharts. Questions, actions and outputs are supported.
