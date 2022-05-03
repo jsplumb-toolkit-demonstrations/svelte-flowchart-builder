@@ -1,20 +1,24 @@
-import * as Dialogs from "@jsplumbtoolkit/dialogs"
+import * as Dialogs from "@jsplumbtoolkit/dialogs-2"
+
+const DIALOG_TEXT = "dlgText"
+const DIALOG_CONFIRM = "dlgConfirm"
+const DIALOG_MESSAGE = "dlgMessage"
 
 export function initialiseDialogs() {
     const dialogs = Dialogs.newInstance({
         dialogs: {
-            dlgText: {
-                template:'<input type="text" size="50" jtk-focus jtk-att="text" value="${text}" jtk-commit="true"/>',
+            [DIALOG_TEXT]: {
+                template:'<input type="text" size="50" jtk-focus jtk-att="text" value="{{text}}" jtk-commit="true"/>',
                 title:'Enter Text',
                 cancelable:true
             },
-            dlgConfirm: {
-                template:'${msg}',
+            [DIALOG_CONFIRM]: {
+                template:'{{msg}}',
                 title:'Please Confirm',
                 cancelable:true
             },
-            dlgMessage: {
-                template:'${msg}',
+            [DIALOG_MESSAGE]: {
+                template:'{{msg}}',
                 title:'Message',
                 cancelable:false
             }
@@ -24,7 +28,7 @@ export function initialiseDialogs() {
     const dialogManager = {
         showEdgeLabelDialog: (data, callback, abort) => {
             dialogs.show({
-                id: 'dlgText',
+                id: DIALOG_TEXT,
                 data: {
                     text: data.label || ''
                 },
@@ -36,7 +40,7 @@ export function initialiseDialogs() {
         },
         confirmDelete:(data, callback) => {
             dialogs.show({
-                id: "dlgConfirm",
+                id: DIALOG_CONFIRM,
                 data: {
                     msg: `Delete '${data.text}'?`
                 },
@@ -45,9 +49,9 @@ export function initialiseDialogs() {
         },
         editName:(data, callback) => {
             dialogs.show({
-                id: "dlgText",
+                id: DIALOG_TEXT,
                 data: data,
-                title: "Edit " + data.type + " name",
+                title: `Edit ${data.type} name`,
                 onOK:  callback
             });
         }
