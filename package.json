@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "rollup": "npx rollup -c"
+    "build": "npx rollup -c"
   },
   "repository": {
     "type": "git",
@@ -19,7 +19,8 @@
   "devDependencies": {
     "svelte": "*",
     "@jsplumbtoolkit/browser-ui-svelte": "^5.6.0",
-    "@jsplumbtoolkit/dialogs": "^5.6.0",
+    "@jsplumbtoolkit/drop": "^5.6.0",
+    "@jsplumbtoolkit/dialogs-2": "^5.6.0",
     "@jsplumbtoolkit/connector-editors-orthogonal": "^5.6.0",
     "@jsplumbtoolkit/browser-ui-plugin-drawing-tools": "^5.6.0",
     "@jsplumbtoolkit/browser-ui-plugin-lasso": "^5.6.0",
