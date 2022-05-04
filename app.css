@@ -15,8 +15,11 @@
 
 /* ----------------------- node styles ------------------------- */
 
-.flowchart-object {
+.jtk-node {
     z-index: 10;
+}
+
+.flowchart-object {
     border: none;
     overflow: visible;
     display:flex;
