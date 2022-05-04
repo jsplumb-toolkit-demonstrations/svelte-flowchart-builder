@@ -203,15 +203,7 @@
         },
         plugins:[
             DrawingToolsPlugin.type,
-            LassoPlugin.type,
-            {
-                type: MiniviewPlugin.type,
-                options: {
-                    container: document.getElementById("miniview")
-                }
-            }
-
-
+            LassoPlugin.type
         ],
         defaults:{
             connector:OrthogonalConnector.type
@@ -243,14 +235,17 @@
     }
 
     function setMode(evt) {
-        surfaceComponent.getSurface().setMode(evt.detail)
+        surfaceComponent.getSurface().setMode(evt)
     }
 
     onMount( async() => {
-        pathEditor = ConnectorEditors.newInstance(surfaceComponent.getSurface())
+        const surface = surfaceComponent.getSurface()
 
+        pathEditor = ConnectorEditors.newInstance(surface)
+
+        // configure drag/drop nodes
         new SurfaceDropManager({
-            surface:surfaceComponent.getSurface(),
+            surface,
             source:document.getElementById("node-palette"),
             selector:"div",
             dataGenerator:(el) => {
@@ -259,6 +254,14 @@
                     w:el.getAttribute("data-width"),
                     h:el.getAttribute("data-height")
                 }
+            }
+        })
+
+        // add a miniview
+        surface.addPlugin({
+            type:MiniviewPlugin.type,
+            options:{
+                container: document.getElementById("miniview")
             }
         })
 
