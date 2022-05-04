@@ -288,7 +288,7 @@
     </div>
 
     <!-- miniview -->
-    <div class="miniview"></div>
+    <div class="miniview" id="miniview"></div>
 </div>
 
 <div class="jtk-demo-rhs">
