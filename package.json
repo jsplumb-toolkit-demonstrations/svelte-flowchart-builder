@@ -18,13 +18,13 @@
     "homepage": "https://github.com/jsplumb-toolkit-demonstrations/svelte-flowchart-builder#readme",
     "dependencies": {
         "svelte": "^3.0.0",
-        "@jsplumbtoolkit/browser-ui-svelte": "^5.9.0",
-        "@jsplumbtoolkit/drop": "^5.9.0",
-        "@jsplumbtoolkit/dialogs-2": "^5.9.0",
-        "@jsplumbtoolkit/connector-editors-orthogonal": "^5.9.0",
-        "@jsplumbtoolkit/browser-ui-plugin-drawing-tools": "^5.9.0",
-        "@jsplumbtoolkit/browser-ui-plugin-miniview": "^5.9.0",
-        "@jsplumbtoolkit/browser-ui-plugin-lasso": "^5.9.0"
+        "@jsplumbtoolkit/browser-ui-svelte": "^5.10.0",
+        "@jsplumbtoolkit/drop": "^5.10.0",
+        "@jsplumbtoolkit/dialogs-2": "^5.10.0",
+        "@jsplumbtoolkit/connector-editors-orthogonal": "^5.10.0",
+        "@jsplumbtoolkit/browser-ui-plugin-drawing-tools": "^5.10.0",
+        "@jsplumbtoolkit/browser-ui-plugin-miniview": "^5.10.0",
+        "@jsplumbtoolkit/browser-ui-plugin-lasso": "^5.10.0"
     },
     "devDependencies": {
         "@rollup/plugin-node-resolve": "*",
