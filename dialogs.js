@@ -1,11 +1,11 @@
-import * as Dialogs from "@jsplumbtoolkit/dialogs-2"
+import { Dialogs } from "@jsplumbtoolkit/browser-ui"
 
 const DIALOG_TEXT = "dlgText"
 const DIALOG_CONFIRM = "dlgConfirm"
 const DIALOG_MESSAGE = "dlgMessage"
 
 export function initialiseDialogs() {
-    const dialogs = Dialogs.newInstance({
+    const dialogs = new Dialogs({
         dialogs: {
             [DIALOG_TEXT]: {
                 template:'<input type="text" size="50" jtk-focus jtk-att="text" value="{{text}}" jtk-commit="true"/>',

@@ -1,34 +1,32 @@
 
 <script>
     import { onMount } from "svelte"
-    import { AbsoluteLayout, uuid } from "@jsplumbtoolkit/core"
     import { newInstance,
-        SurfaceComponent,
+        SurfaceComponent
+    } from "@jsplumbtoolkit/browser-ui-svelte";
+
+    import {
+        AbsoluteLayout,
+        uuid,
         render,
         EVENT_CANVAS_CLICK,
         EVENT_CLICK,
         EVENT_DBL_CLICK,
-            EVENT_TAP,
+        EVENT_TAP,
         BlankEndpoint,
-        ArrowOverlay, AnchorLocations, DEFAULT, LabelOverlay
-    } from "@jsplumbtoolkit/browser-ui-svelte";
-
-    import { SurfaceDropManager } from "@jsplumbtoolkit/drop"
+        ArrowOverlay, AnchorLocations, DEFAULT, LabelOverlay,
+        SurfaceDropManager,
+        OrthogonalConnector,
+        DrawingToolsPlugin,
+        LassoPlugin,
+        MiniviewPlugin,
+    EdgePathEditor} from "@jsplumbtoolkit/browser-ui"
 
     import { initialiseDialogs } from './dialogs'
-
-    import { OrthogonalConnector } from "@jsplumbtoolkit/connector-orthogonal"
-    import * as ConnectorEditors from "@jsplumbtoolkit/connector-editors"
-    import * as OrthogonalConnectorEditor from "@jsplumbtoolkit/connector-editors-orthogonal"
-    import { DrawingToolsPlugin } from "@jsplumbtoolkit/browser-ui-plugin-drawing-tools"
-    import { LassoPlugin } from "@jsplumbtoolkit/browser-ui-plugin-lasso"
-    import { MiniviewPlugin } from "@jsplumbtoolkit/browser-ui-plugin-miniview"
 
     import ActionComponent from './components/ActionComponent.svelte'
     import OutputComponent from './components/OutputComponent.svelte'
     import QuestionComponent from './components/QuestionComponent.svelte'
-
-    OrthogonalConnectorEditor.initialize()
 
     export let data;
 
@@ -241,7 +239,7 @@
     onMount( async() => {
         const surface = surfaceComponent.getSurface()
 
-        pathEditor = ConnectorEditors.newInstance(surface)
+        pathEditor = new EdgePathEditor(surface)
 
         // configure drag/drop nodes
         new SurfaceDropManager({
